@@ -1,0 +1,441 @@
+.client-login-page {
+  background-color: rgba(255, 255, 255, 1);
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+}
+
+.client-login-page .div-2 {
+  background: linear-gradient(180deg, rgb(234, 221, 255) 0%, rgb(255, 255, 255) 100%);
+  background-color: var(--m3-schemes-primary-container);
+  border: 8px solid;
+  border-color: var(--m3-schemes-outline-variant);
+  height: 843px;
+  position: relative;
+  width: 1415px;
+}
+
+.client-login-page .chrome-browser-bar {
+  align-items: center;
+  background-color: var(--m3-schemes-surface);
+  box-shadow: 0px 0.59px 0px #00000026, inset 0px -0.59px 0px #0000000d;
+  display: flex;
+  gap: 16px;
+  left: 0;
+  padding: 16px;
+  position: absolute;
+  top: 0;
+  width: 1415px;
+}
+
+.client-login-page .icons {
+  flex: 0 0 auto;
+  position: relative;
+}
+
+.client-login-page .address-bar {
+  align-items: center;
+  background-color: var(--m3-schemes-surface-container);
+  border-radius: 46.08px;
+  display: flex;
+  flex: 1;
+  flex-grow: 1;
+  justify-content: space-between;
+  overflow: hidden;
+  padding: 6px 16px;
+  position: relative;
+}
+
+.client-login-page .URL {
+  align-items: center;
+  display: flex;
+  flex: 1;
+  flex-grow: 1;
+  gap: 8px;
+  position: relative;
+}
+
+.client-login-page .lock {
+  height: 15.36px;
+  position: relative;
+  width: 15.36px;
+}
+
+.client-login-page .text {
+  color: var(--m3-schemes-on-surface);
+  flex: 1;
+  font-family: var(--m3-body-large-font-family);
+  font-size: var(--m3-body-large-font-size);
+  font-style: var(--m3-body-large-font-style);
+  font-weight: var(--m3-body-large-font-weight);
+  letter-spacing: var(--m3-body-large-letter-spacing);
+  line-height: var(--m3-body-large-line-height);
+  margin-top: -1px;
+  position: relative;
+}
+
+.client-login-page .star {
+  height: 20px;
+  position: relative;
+  width: 20px;
+}
+
+.client-login-page .div-wrapper {
+  background-color: var(--m3-schemes-outline);
+  border-radius: 109.09px;
+  height: 28px;
+  overflow: hidden;
+  position: relative;
+  width: 28px;
+}
+
+.client-login-page .text-wrapper-2 {
+  color: var(--m-3white);
+  font-family: var(--m3-body-large-font-family);
+  font-size: var(--m3-body-large-font-size);
+  font-style: var(--m3-body-large-font-style);
+  font-weight: var(--m3-body-large-font-weight);
+  height: 24px;
+  left: 7px;
+  letter-spacing: var(--m3-body-large-letter-spacing);
+  line-height: var(--m3-body-large-line-height);
+  position: absolute;
+  text-align: center;
+  top: 1px;
+  white-space: nowrap;
+}
+
+.client-login-page .more {
+  height: 24px;
+  position: relative;
+  width: 24px;
+}
+
+.client-login-page .overlap-group {
+  border-radius: 8px;
+  height: 552px;
+  left: 547px;
+  position: absolute;
+  top: 179px;
+  width: 320px;
+}
+
+.client-login-page .form-log-in {
+  align-items: flex-start;
+  background-color: var(--color-background-default-default);
+  border: 1px solid;
+  border-color: var(--color-border-default-default);
+  border-radius: var(--size-radius-200);
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--size-space-600);
+  height: 552px;
+  left: 0;
+  min-width: 320px;
+  padding: var(--size-space-600);
+  position: absolute;
+  top: 0;
+}
+
+.client-login-page .input-field {
+  align-items: flex-start;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  gap: var(--size-space-200);
+  position: relative;
+  width: 272px;
+}
+
+.client-login-page .label {
+  align-self: stretch;
+  background: transparent;
+  border: none;
+  color: var(--color-text-default-default);
+  font-family: var(--body-base-font-family);
+  font-size: var(--body-base-font-size);
+  font-style: var(--body-base-font-style);
+  font-weight: var(--body-base-font-weight);
+  letter-spacing: var(--body-base-letter-spacing);
+  line-height: var(--body-base-line-height);
+  margin-top: -1px;
+  padding: 0;
+  position: relative;
+}
+
+.client-login-page .input {
+  align-self: stretch;
+  background-color: var(--color-background-default-default);
+  border: 1px solid;
+  border-color: var(--color-border-default-default);
+  border-radius: var(--size-radius-200);
+  color: var(--color-text-default-tertiary);
+  flex: 1;
+  font-family: var(--single-line-body-base-font-family);
+  font-size: var(--single-line-body-base-font-size);
+  font-style: var(--single-line-body-base-font-style);
+  font-weight: var(--single-line-body-base-font-weight);
+  letter-spacing: var(--single-line-body-base-letter-spacing);
+  line-height: var(--single-line-body-base-line-height);
+  margin-bottom: -1px;
+  margin-left: -1px;
+  margin-right: -1px;
+  margin-top: -0.5px;
+  min-width: 240px;
+  overflow: hidden;
+  padding: var(--size-space-300) var(--size-space-400) var(--size-space-300) var(--size-space-400);
+  position: relative;
+  width: 100%;
+}
+
+.client-login-page .label-2 {
+  align-self: stretch;
+  color: var(--color-text-default-default);
+  font-family: var(--body-base-font-family);
+  font-size: var(--body-base-font-size);
+  font-style: var(--body-base-font-style);
+  font-weight: var(--body-base-font-weight);
+  letter-spacing: var(--body-base-letter-spacing);
+  line-height: var(--body-base-line-height);
+  margin-top: -1px;
+  position: relative;
+}
+
+.client-login-page .value-wrapper {
+  align-items: center;
+  align-self: stretch;
+  background-color: var(--color-background-default-default);
+  border: 1px solid;
+  border-color: var(--color-border-default-default);
+  border-radius: var(--size-radius-200);
+  display: flex;
+  flex: 0 0 auto;
+  margin-bottom: -1px;
+  margin-left: -1px;
+  margin-right: -1px;
+  min-width: 240px;
+  overflow: hidden;
+  padding: var(--size-space-300) var(--size-space-400) var(--size-space-300) var(--size-space-400);
+  position: relative;
+  width: 100%;
+}
+
+.client-login-page .value {
+  color: var(--color-text-default-tertiary);
+  flex: 1;
+  font-family: var(--single-line-body-base-font-family);
+  font-size: var(--single-line-body-base-font-size);
+  font-style: var(--single-line-body-base-font-style);
+  font-weight: var(--single-line-body-base-font-weight);
+  letter-spacing: var(--single-line-body-base-letter-spacing);
+  line-height: var(--single-line-body-base-line-height);
+  margin-top: -0.5px;
+  position: relative;
+}
+
+.client-login-page .button-group {
+  align-items: center;
+  display: flex;
+  flex: 0 0 auto;
+  gap: var(--size-space-400);
+  position: relative;
+  width: 272px;
+}
+
+.client-login-page .button-3 {
+  all: unset;
+  align-items: center;
+  background-color: var(--color-background-brand-default);
+  border: 1px solid;
+  border-color: var(--color-border-brand-default);
+  border-radius: var(--size-radius-200);
+  box-sizing: border-box;
+  display: flex;
+  flex: 1;
+  flex-grow: 1;
+  gap: var(--size-space-200);
+  justify-content: center;
+  overflow: hidden;
+  padding: var(--size-space-300);
+  position: relative;
+}
+
+.client-login-page .button-4 {
+  all: unset;
+  box-sizing: border-box;
+  color: var(--color-text-brand-on-brand);
+  font-family: var(--single-line-body-base-font-family);
+  font-size: var(--single-line-body-base-font-size);
+  font-style: var(--single-line-body-base-font-style);
+  font-weight: var(--single-line-body-base-font-weight);
+  letter-spacing: var(--single-line-body-base-letter-spacing);
+  line-height: var(--single-line-body-base-line-height);
+  margin-top: -1px;
+  position: relative;
+  white-space: nowrap;
+  width: fit-content;
+}
+
+.client-login-page .input-2 {
+  align-items: center;
+  background-color: var(--color-background-default-default-hover);
+  border: 1px solid;
+  border-color: var(--color-border-default-default);
+  border-radius: var(--size-radius-200);
+  display: flex;
+  left: 18px;
+  overflow: hidden;
+  padding: var(--size-space-300) var(--size-space-400) var(--size-space-300) var(--size-space-400);
+  position: absolute;
+  top: 350px;
+  width: 274px;
+}
+
+.client-login-page .text-wrapper-3 {
+  color: var(--color-text-default-tertiary);
+  flex: 1;
+  font-family: var(--single-line-body-base-font-family);
+  font-size: var(--single-line-body-base-font-size);
+  font-style: var(--single-line-body-base-font-style);
+  font-weight: var(--single-line-body-base-font-weight);
+  letter-spacing: var(--single-line-body-base-letter-spacing);
+  line-height: var(--single-line-body-base-line-height);
+  margin-top: -0.5px;
+  position: relative;
+  text-align: center;
+}
+
+.client-login-page .input-3 {
+  align-items: center;
+  background-color: var(--color-background-default-default-hover);
+  border: 1px solid;
+  border-color: var(--color-border-default-default);
+  border-radius: var(--size-radius-200);
+  display: flex;
+  left: 18px;
+  overflow: hidden;
+  padding: var(--size-space-300) var(--size-space-400) var(--size-space-300) var(--size-space-400);
+  position: absolute;
+  top: 403px;
+  width: 274px;
+}
+
+.client-login-page .input-4 {
+  align-items: center;
+  background-color: var(--color-background-default-default-hover);
+  border: 1px solid;
+  border-color: var(--color-border-default-default);
+  border-radius: var(--size-radius-200);
+  display: flex;
+  left: 18px;
+  overflow: hidden;
+  padding: var(--size-space-300) var(--size-space-400) var(--size-space-300) var(--size-space-400);
+  position: absolute;
+  top: 457px;
+  width: 274px;
+}
+
+.client-login-page .text-link-instance {
+  display: flex !important;
+  left: 24px !important;
+  position: absolute !important;
+  top: 291px !important;
+  width: 272px !important;
+}
+
+.client-login-page .design-component-instance-node {
+  color: #195ad8 !important;
+  font-family: var(--body-small-font-family) !important;
+  font-size: var(--body-small-font-size) !important;
+  font-style: var(--body-small-font-style) !important;
+  font-weight: var(--body-small-font-weight) !important;
+  letter-spacing: var(--body-small-letter-spacing) !important;
+  line-height: var(--body-small-line-height) !important;
+  text-decoration: unset !important;
+}
+
+.client-login-page .line {
+  height: 1px;
+  left: 15px;
+  object-fit: cover;
+  position: absolute;
+  top: 327px;
+  width: 117px;
+}
+
+.client-login-page .google {
+  height: 1px;
+  left: 179px;
+  object-fit: cover;
+  position: absolute;
+  top: 327px;
+  width: 117px;
+}
+
+.client-login-page .text-wrapper-4 {
+  color: #000000;
+  font-family: var(--body-link-font-family);
+  font-size: var(--body-link-font-size);
+  font-style: var(--body-link-font-style);
+  font-weight: var(--body-link-font-weight);
+  left: 147px;
+  letter-spacing: var(--body-link-letter-spacing);
+  line-height: var(--body-link-line-height);
+  position: absolute;
+  text-decoration: underline;
+  top: 317px;
+  white-space: nowrap;
+}
+
+.client-login-page .p {
+  color: #79747e;
+  font-family: var(--body-small-font-family);
+  font-size: var(--body-small-font-size);
+  font-style: var(--body-small-font-style);
+  font-weight: var(--body-small-font-weight);
+  left: 11px;
+  letter-spacing: var(--body-small-letter-spacing);
+  line-height: var(--body-small-line-height);
+  position: absolute;
+  top: 519px;
+  white-space: nowrap;
+}
+
+.client-login-page .text-link-2 {
+  display: flex !important;
+  left: 24px !important;
+  position: absolute !important;
+  top: 267px !important;
+  width: 272px !important;
+}
+
+.client-login-page .header-auth-instance {
+  left: 1211px !important;
+  position: absolute !important;
+  top: 90px !important;
+}
+
+.client-login-page .text-wrapper-5 {
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent;
+  background: linear-gradient(
+    180deg,
+    rgb(20.61, 14.35, 36) 0%,
+    rgb(75.2, 52.36, 131.37) 51.5%,
+    rgb(108.91, 83.19, 172.13) 100%
+  );
+  background-clip: text;
+  color: transparent;
+  font-family: var(--title-page-font-family);
+  font-size: var(--title-page-font-size);
+  font-style: var(--title-page-font-style);
+  font-weight: var(--title-page-font-weight);
+  left: 76px;
+  letter-spacing: var(--title-page-letter-spacing);
+  line-height: var(--title-page-line-height);
+  position: absolute;
+  text-fill-color: transparent;
+  top: 133px;
+  white-space: nowrap;
+}
