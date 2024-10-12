@@ -1,4 +1,47 @@
-import React from "react"
+// framework/languages used:
+// -- typescript
+// -- css (both block and inline) mixed with tailwind (inline)
+// note: we didn't create a separate style.css file 
+// since they are all included here.
+
+//-------------------------------------------------------------
+
+import React, { useState, useEffect } from "react"
+import { EyeIcon, EyeOffIcon} from "lucide-react"
+
+interface User {
+  email: string;
+  name: string;
+}
+
+interface LoginPageProps {
+  onLogin: (user: User) => void;
+}
+
+
+
+export default function CustosLogin ({ onLogin }: LoginPageProps) {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
+  const [error, setError] = useState('')
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setError('')
+
+    // Simulated authentication logic
+    if (email === 'user@example.com' && password === 'password') {
+      const user: User = { email, name: 'John Doe' }
+      localStorage.setItem('user', JSON.stringify(user))
+      onLogin(user)
+    } else {
+      setError('Invalid email or password')
+    }
+  }
+
+////////////////////// css styles /////////////////////////////////
 
 const styles = {
   container: {
@@ -48,9 +91,10 @@ const styles = {
   },
   forgotPassword: {
     alignSelf: 'flex-start',
-    color: '#b3b3b3',
-    textDecoration: 'none',
+    color: '#1e88e5',
+    textDecoration: isHovered? 'underline' : 'none',
     fontSize: '14px',
+    cursor: 'pointer',
   },
   button: {
     width: '100%',
@@ -65,14 +109,25 @@ const styles = {
     cursor: 'pointer',
     boxShadow: '0px 4px 4px #00000040',
   },
+  eyeButton: {
+    position: 'absolute' as const,
+    right: '10px',
+    top: '50%',
+    transform: 'translateY(-50%)',
+    background: 'none',
+    border: 'none',
+    cursor: 'pointer',
+    padding: 0,
+  },
 }
+////////////////////// jsx section /////////////////////////////////////////
 
-export default function Component() {
   return (
     <div style={styles.container}>
       <div style={styles.formContainer}>
         <h2 style={styles.title}>Custos Login</h2>
-        <form style={{ width: '100%' }}>
+        {error && <p className="text-red-500 text-center mb-4">{error}</p>} {/*not sure*/}
+        <form onSubmit={handleSubmit} style={{ width: '100%' }}>
           <div style={styles.inputField}>
             <label htmlFor="email" style={styles.label}>
               Username/Email
@@ -80,30 +135,62 @@ export default function Component() {
             <input
               id="email"
               placeholder="username"
-              type="text"
+              type="email"
               style={styles.input}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
             />
           </div>
           <div style={{ ...styles.inputField, marginTop: '20px' }}>
             <label htmlFor="password" style={styles.label}>
               Password
             </label>
-            <input
-              id="password"
-              placeholder="password"
-              type="password"
-              style={styles.input}
-            />
+            <div style={{position:'relative'}}>
+              <input
+                id="password"
+                placeholder="Enter your password"
+                type=/*"password"*/ {showPassword ? "text" : "password"}
+                style={styles.input}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+              <button
+                type="button"
+                /*className="absolute inset-y-0 right-0 pr-3 flex items-center"*/
+                style={styles.eyeButton}
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? (
+                  <EyeOffIcon className="h-5 w-5 text-gray-500" />
+                ) : (
+                  <EyeIcon className="h-5 w-5 text-gray-500" />
+                )}
+              </button>
+            </div>
           </div>
-          <div style={{ marginTop: '10px', marginBottom: '20px' }}>
-            <a href="#" style={styles.forgotPassword}>
+          <div style={{ marginTop: '10px', marginBottom: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <label className="flex items-center">
+              <input type="checkbox" className="form-checkbox h-4 w-4 text-blue-600" />
+              <span className="ml-2 text-sm text-gray-600">Remember me</span>
+            </label>
+            <a href="#" style={styles.forgotPassword} 
+            onMouseEnter={() => setIsHovered(true)}  // handle hover state
+            onMouseLeave={() => setIsHovered(false)}>
               Forgot password?
             </a>
           </div>
-          <button type="button" style={styles.button}>
+          <button type="submit" style={styles.button} >
             Login
           </button>
         </form>
+        <p className="mt-8 text-center text-sm text-gray-600">
+          Don't have an account?{" "}
+          <a href="#" style={{ color: '#1e88e5', textDecoration: 'none' }}>
+            Sign up
+          </a>
+        </p>
       </div>
     </div>
   )
