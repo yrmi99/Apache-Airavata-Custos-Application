@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import LoginPage from './LoginPage.tsx'
 import LandingPage from './Landing.tsx'
+//@ts-ignore
 import CustosLogin from './authLogin.tsx'
 import UserDetails from './user-details.tsx'
 
@@ -30,7 +31,7 @@ export default function App() {
       {user ? (
         <UserDetails user={user} onLogout={handleLogout} onSwitchUser={handleSwitchUser}/>
       ) : (
-        <CustosLogin setToken={setToken}/>
+        <CustosLogin/>
       )}
     </div>
   )
