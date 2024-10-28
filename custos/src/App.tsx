@@ -1,7 +1,9 @@
 import React, { useState, useContext } from 'react'
 import ReactDOM from 'react-dom'
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom'
 import { AuthContext, AuthProvider, type IAuthContext, type TAuthConfig } from 'react-oauth2-code-pkce'
-import LoginButton from './authLogin'
+import LoginPage from './Pages/authLogin'
+import DashboardPage from './Pages/mainDetails'
 import './authLogin.css'
 
 const authConfig: TAuthConfig = {
@@ -17,10 +19,13 @@ const authConfig: TAuthConfig = {
 export default function App() {
     return (
         <AuthProvider authConfig={authConfig}>
-            <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-                <h1 className="text-2xl font-bold mb-4">Welcome to Our App</h1>
-                    <LoginButton/>
-            </div>
+            <Router>
+                <Routes>
+                    <Route path="/" element={<LoginPage/>}></Route>
+                    <Route path="/callback" element={<LoginPage/>}></Route>
+                    <Route path="/dashboard" element={<DashboardPage/>}></Route>
+                </Routes>
+            </Router>
         </AuthProvider>
     )
   }

@@ -3,7 +3,7 @@ import LoginPage from './LoginPage.tsx'
 import LandingPage from './Landing.tsx'
 //@ts-ignore
 import CustosLogin from './authLogin.tsx'
-import UserDetails from './user-details.tsx'
+
 
 export default function App() {
   const [user, setUser] = useState(null)
