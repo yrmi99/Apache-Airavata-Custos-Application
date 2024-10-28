@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, ReactHTML } from 'react'
 import { EyeIcon, EyeOffIcon, LogInIcon } from "lucide-react"
 
 interface User {
@@ -28,6 +28,10 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
     } else {
       setError('Invalid email or password')
     }
+  }
+
+  const getAuthenticationURL = async (e: React.FormEvent) => {
+    
   }
 
   return (

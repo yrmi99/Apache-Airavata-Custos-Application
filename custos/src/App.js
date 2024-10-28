@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import LoginPage from './LoginPage.tsx'
 import LandingPage from './Landing.tsx'
-import CustosLogin from './custos-login.tsx'
+import CustosLogin from './authLogin.tsx'
 import UserDetails from './user-details.tsx'
 
 export default function App() {
   const [user, setUser] = useState(null)
+  const [token, setToken] = useState(null)
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user')
@@ -13,11 +14,6 @@ export default function App() {
       setUser(JSON.parse(storedUser))
     }
   }, [])
-
-  const handleLogin = (loggedInUser) => {
-    setUser(loggedInUser)
-    localStorage.setItem('user', JSON.stringify(loggedInUser)); // Store user in localStorage
-  }
 
   const handleLogout = () => {
     localStorage.removeItem('user')
@@ -34,7 +30,7 @@ export default function App() {
       {user ? (
         <UserDetails user={user} onLogout={handleLogout} onSwitchUser={handleSwitchUser}/>
       ) : (
-        <CustosLogin onLogin={handleLogin} />
+        <CustosLogin setToken={setToken}/>
       )}
     </div>
   )
