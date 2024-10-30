@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import { AuthContext, AuthProvider, type IAuthContext, type TAuthConfig } from 'react-oauth2-code-pkce'
 import LoginPage from './Pages/authLogin'
 import DashboardPage from './Pages/mainDetails'
-import './authLogin.css'
 
 const authConfig: TAuthConfig = {
     clientId: 'custos-w2pcilydswffevyrswct-10000000',

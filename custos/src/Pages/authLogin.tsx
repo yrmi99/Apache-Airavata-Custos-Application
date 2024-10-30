@@ -1,7 +1,6 @@
 import React, { useContext, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AuthContext, type IAuthContext } from 'react-oauth2-code-pkce'
-import './authLogin.css'
 
 
 const styles = {
