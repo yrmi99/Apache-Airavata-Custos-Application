@@ -157,7 +157,11 @@ export default function MainPage() {
           if (validated && data.success) {
               setMessage(data.message);
           } else {
-              setMessage('Error occurred while adding content');
+              if (!validated) {
+                setMessage('You do not have access to this control')
+              } else {
+                setMessage('Error occurred while adding content');
+              }
           }
       } catch (error) {
           setMessage('Failed to connect to server');
