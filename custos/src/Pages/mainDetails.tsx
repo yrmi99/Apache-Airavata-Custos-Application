@@ -135,6 +135,8 @@ export default function MainPage() {
               },
           });
 
+          const userinfo = await fetch('https://api.playground.usecustos.org/')
+
           const data = await response.json();
           
           if (data.success) {
