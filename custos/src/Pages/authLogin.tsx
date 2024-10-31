@@ -2,6 +2,39 @@ import React, { useContext, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AuthContext, type IAuthContext } from 'react-oauth2-code-pkce'
 
+interface GroupData {
+  id: string;
+  name: string;
+  description: string;
+  owner_id: string;
+  parent_id: string | null;
+  attributes: Array<{ key: string; value: string[] }>;
+  realm_roles: string[];
+  client_roles: string[];
+}
+
+const groups: GroupData[] = [
+  {
+    id: "admin-group",
+    name: "Admin",
+    description: "Administrative group with full access",
+    owner_id: "ychauhan9@gatech.edu",
+    parent_id: null,
+    attributes: [{ key: "level", value: ["high"] }],
+    realm_roles: ["admin_role"],
+    client_roles: ["admin_client_role"],
+  },
+  {
+    id: "user-group",
+    name: "User",
+    description: "Regular user group with limited access",
+    owner_id: "ychauhan9@gatech.edu",
+    parent_id: null,
+    attributes: [{ key: "level", value: ["medium"] }],
+    realm_roles: ["user_role"],
+    client_roles: ["user_client_role"],
+  },
+];
 
 const styles = {
   container: {
@@ -83,9 +116,34 @@ const styles = {
 
 export default function AuthLogin() {
     const { tokenData, token, logIn, logOut, idToken, error } = useContext<IAuthContext>(AuthContext)
+    const API_URL = 'https://api.playground.usecustos.org/api/v1/group-management/groups';
+    const CLIENT_ID = 'custos-w2pcilydswffevyrswct-10000000';
     const navigate = useNavigate()
 
     useEffect(() => {
+      const createGroup = async (groupData: GroupData) => {
+        let data;
+        try {
+          const response = await axios.post(API_URL, groupData, {
+            headers: {
+              client_id: CLIENT_ID,
+              Authorization: `Bearer ${token}`,
+            },
+          });
+        } catch (error) {
+
+        }
+      };
+
+      const createGroups = async () => {
+        for (const group of groups) {
+          await createGroup(group);
+        }
+        console.log('Group creation script complete.');
+      };
+
+      createGroups();
+
         if (token) {
             navigate('/dashboard')
         }
