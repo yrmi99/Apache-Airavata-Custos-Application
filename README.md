@@ -31,3 +31,12 @@ the backend server API and the access control. To add content, the front-end sen
 for a response with success. To send the api call, the user's groups are checked by calling the /userinfo
 endpoint. This provides the user's groups and scopes. If the user is in the group "Adminsss", they are able to
 add content; however, if not, they are told they do not have access to the it.
+
+## Walkthrough video for Milestone 3:
+There are two demonstrations in the video.
+1. - First part demonstrates the user(admin) trying to add content without having the server running.
+   - This will shows an error message saying "Failed to connect to server"
+
+2. - Second part demonstrates a non-admin user trying to add content. (but with server running in the background)
+   - This will shows error message saying "You do not have access to the control"
+
