@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AuthContext } from 'react-oauth2-code-pkce'
 import { LogOut, UserIcon } from 'lucide-react';
@@ -112,6 +112,8 @@ const styles = {
 export default function MainPage() {
   const { tokenData, token, logOut } = useContext(AuthContext)
   const navigate = useNavigate()
+  const [message, setMessage] = useState('Get started by adding some content.'); //
+  const [isLoading, setIsLoading] = useState(false); //
 
   useEffect(() => {
     if (!token) {
@@ -122,6 +124,32 @@ export default function MainPage() {
   if (!token || !tokenData) return null
 
   const userData: TokenData = typeof tokenData === 'string' ? JSON.parse(tokenData) : tokenData
+/////////////////////////////////////////////////////////
+  const handleAddContent = async () => {
+      try {
+          setIsLoading(true);
+          const response = await fetch('http://localhost:3001/api/add-content', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+          });
+
+          const data = await response.json();
+          
+          if (data.success) {
+              setMessage(data.message);
+          } else {
+              setMessage('Error occurred while adding content');
+          }
+      } catch (error) {
+          setMessage('Failed to connect to server');
+          console.error('Error:', error);
+      } finally {
+          setIsLoading(false);
+      }
+  };
+//------------------------------------------------------------
   return (
     <div style={styles.body}>
       <div style={styles.div}>
@@ -148,10 +176,18 @@ export default function MainPage() {
         </div>
 
         <div style={styles.content}>
-          <p className="text-wrapper">Get started by adding some content.</p>
-          <button type="button" style={styles.addContent}>
+          {/* <p className="text-wrapper">Get started by adding some content.</p> */}
+          {/* <button type="button" style={styles.addContent}>
             Add Content
-          </button>
+          </button> */}
+          <p className="text-wrapper">{message}</p>
+            <button 
+                onClick={handleAddContent}
+                disabled={isLoading}
+                style={styles.addContent}
+            >
+                {isLoading ? 'Adding...' : 'Add Content'}
+            </button>
         </div>
         </div>
       </div>
