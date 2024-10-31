@@ -8,6 +8,7 @@ interface TokenData {
   email?: string
 }
 
+
 const styles = {
   body: {
     minHeight: '100vh',
@@ -135,11 +136,25 @@ export default function MainPage() {
               },
           });
 
-          const userinfo = await fetch('https://api.playground.usecustos.org/')
+          const userinfo = await fetch('https://api.playground.usecustos.org/api/v1/user-management/userinfo', {
+            method: 'GET',
+            headers: {
+              client_id: 'custos-w2pcilydswffevyrswct-10000000',
+              Authorization: `Bearer ${token}`,
+            }
+          });
 
           const data = await response.json();
+          const info = await userinfo.json();
+          let validated = false;
+
+          for (const group of info.groups) {
+              if (group == "Adminsss"){
+                  validated = true;
+              }
+          }
           
-          if (data.success) {
+          if (validated && data.success) {
               setMessage(data.message);
           } else {
               setMessage('Error occurred while adding content');
