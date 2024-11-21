@@ -1,7 +1,18 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AuthContext } from 'react-oauth2-code-pkce'
-import { LogOut, UserIcon } from 'lucide-react';
+import { UserIcon } from 'lucide-react';
+import { UserServiceClient } from './grpc/UserServiceClientPb'; // Generated from our .proto file
+import { GroupServiceClient } from './grpc/GroupServiceClientPb'; // Generated from our .proto file
+import {
+  UserProfile,
+  UserRequest,
+  UserList,
+  Group,
+  GroupRequest,
+  GroupList,
+  Empty
+} from './grpc/user_pb'; // Generated message definitions
 
 interface TokenData {
   name?: string
@@ -108,7 +119,65 @@ const styles = {
     marginTop: '64px',
   }
 };
+//------------------------------------------------------------
+const ClientPage = () => {
+  const [userId, setUserId] = useState('')
+  const [user, setUser] = useState<any>(null)
+  const [message, setMessage] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  const [groupId, setGroupId] = useState('')
+  const [group, setGroup] = useState<any>(null)
+  const [groupMessage, setGroupMessage] = useState('')
+  const [isGroupLoading, setIsGroupLoading] = useState(false)
 
+  const userClient = new UserServiceClient('http://localhost:8080')
+  const groupClient = new GroupServiceClient('http://localhost:8080')
+
+  const fetchUser = (id: string) => {
+    setIsLoading(true)
+    const request = new UserRequest()
+    request.setUserId(id)
+
+    userClient.fetchUser(request, {}, (err: grpcWeb.Error, response: UserProfile) => {
+      setIsLoading(false)
+      if (err) {
+        setMessage('Error fetching user data')
+        console.error(err)
+      } else {
+        setUser(response.toObject())
+      }
+    })
+  }
+
+  const fetchGroup = (id: string) => {
+    setIsGroupLoading(true)
+    const request = new GroupRequest()
+    request.setGroupId(id)
+
+    groupClient.fetchGroup(request, {}, (err: grpcWeb.Error, response: Group) => {
+      setIsGroupLoading(false)
+      if (err) {
+        setGroupMessage('Error fetching group data')
+        console.error(err)
+      } else {
+        setGroup(response.toObject())
+      }
+    })
+  }
+
+  useEffect(() => {
+    if (userId) {
+      fetchUser(userId)
+    }
+  }, [userId])
+  
+  return (
+    <div>
+      {/* Render User and Group Info */}
+    </div>
+  )
+};
+//------------------------------------------------------------
 
 export default function MainPage() {
   const { tokenData, token, logOut } = useContext(AuthContext)
@@ -125,7 +194,7 @@ export default function MainPage() {
   if (!token || !tokenData) return null
 
   const userData: TokenData = typeof tokenData === 'string' ? JSON.parse(tokenData) : tokenData
-/////////////////////////////////////////////////////////
+
   const handleAddContent = async () => {
       try {
           setIsLoading(true);
@@ -168,7 +237,7 @@ export default function MainPage() {
           console.error('Error:', error);
       } finally {
           setIsLoading(false);
-      }
+      }   
   };
 //------------------------------------------------------------
   return (

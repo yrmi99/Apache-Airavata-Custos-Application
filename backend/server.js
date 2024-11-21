@@ -15,7 +15,7 @@ const userProto = grpc.loadPackageDefinition(packageDefinition).user;
 
 // Connect to the Python gRPC server
 const client = new userProto.UserService(
-  'localhost:50051',
+  'localhost:50052',
   grpc.credentials.createInsecure()
 );
 
