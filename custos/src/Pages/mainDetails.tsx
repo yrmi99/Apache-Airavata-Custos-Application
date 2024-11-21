@@ -2,17 +2,18 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AuthContext } from 'react-oauth2-code-pkce'
 import { UserIcon } from 'lucide-react';
-import { UserServiceClient } from './grpc/UserServiceClientPb'; // Generated from our .proto file
-import { GroupServiceClient } from './grpc/GroupServiceClientPb'; // Generated from our .proto file
+import * as grpcWeb from 'grpc-web';
+import {UserServiceClient} from '../../../backend/grpc/User_profileServiceClientPb'; // service client imported from our .proto
+import { GroupServiceClient } from '../../../backend/grpc/User_profileServiceClientPb';  // Service client
 import {
-  UserProfile,
-  UserRequest,
-  UserList,
+  UserProfile,  // Message types imported from our .proto
   Group,
+  UserRequest,
   GroupRequest,
+  UserList,
   GroupList,
   Empty
-} from './grpc/user_pb'; // Generated message definitions
+} from '../../../backend/grpc/user_profile_pb';  // Message types
 
 interface TokenData {
   name?: string
@@ -136,9 +137,9 @@ const ClientPage = () => {
   const fetchUser = (id: string) => {
     setIsLoading(true)
     const request = new UserRequest()
-    request.setUserId(id)
+    request.setUserid(id)
 
-    userClient.fetchUser(request, {}, (err: grpcWeb.Error, response: UserProfile) => {
+    userClient.fetchUser(request, {}, (err: grpcWeb.RpcError, response: UserProfile) => {
       setIsLoading(false)
       if (err) {
         setMessage('Error fetching user data')
@@ -152,9 +153,9 @@ const ClientPage = () => {
   const fetchGroup = (id: string) => {
     setIsGroupLoading(true)
     const request = new GroupRequest()
-    request.setGroupId(id)
+    request.setGroupid(id)
 
-    groupClient.fetchGroup(request, {}, (err: grpcWeb.Error, response: Group) => {
+    groupClient.fetchGroup(request, {}, (err: grpcWeb.RpcError, response: Group) => {
       setIsGroupLoading(false)
       if (err) {
         setGroupMessage('Error fetching group data')
