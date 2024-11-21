@@ -170,7 +170,10 @@ const ClientPage = () => {
     if (userId) {
       fetchUser(userId)
     }
-  }, [userId])
+    if (groupId) {
+      fetchGroup(groupId);
+    }
+  }, [userId, groupId]);
   
   return (
     <div>
