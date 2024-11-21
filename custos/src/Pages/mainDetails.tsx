@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import { AuthContext } from 'react-oauth2-code-pkce'
 import { UserIcon } from 'lucide-react';
 import * as grpcWeb from 'grpc-web';
-import {UserServiceClient} from '../../../backend/grpc/User_profileServiceClientPb'; // service client imported from our .proto
-import { GroupServiceClient } from '../../../backend/grpc/User_profileServiceClientPb';  // Service client
+import {UserServiceClient} from '../backend/grpc/User_profileServiceClientPb'; // service client imported from our .proto
+import { GroupServiceClient } from '../backend/grpc/User_profileServiceClientPb';  // Service client
 import {
   UserProfile,  // Message types imported from our .proto
   Group,
@@ -13,7 +13,7 @@ import {
   UserList,
   GroupList,
   Empty
-} from '../../../backend/grpc/user_profile_pb';  // Message types
+} from '../backend/grpc/user_profile_pb';  // Message types
 
 interface TokenData {
   name?: string
