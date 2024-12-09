@@ -68,8 +68,9 @@ const styles = {
     fontSize: '12px',
     fontWeight: 700,
     cursor: 'pointer',
-    borderRadius: '4px',
+    borderRadius: '20px',
     marginTop: '16px',
+    marginBottom: '16px'
   },
   select: {
     padding: '8px 16px',
@@ -115,6 +116,7 @@ export default function MainPage() {
   const navigate = useNavigate()
   const [message, setMessage] = useState('Get started by adding some content.'); //
   const [isLoading, setIsLoading] = useState(false); //
+  const [isAddingGroup, setAdding] = useState(false);
 
   useEffect(() => {
     if (!token) {
@@ -207,7 +209,15 @@ export default function MainPage() {
                 disabled={isLoading}
                 style={styles.addContent}
             >
-                {isLoading ? 'Adding...' : 'Add Content'}
+                {isLoading ? 'Loading...' : 'Add User'}
+            </button>
+            <p className="group-wrapper">{message}</p>
+            <button 
+                onClick={handleAddContent}
+                disabled={isAddingGroup}
+                style={styles.addContent}
+            >
+                {isAddingGroup ? 'Loading...' : 'Add Group'}
             </button>
         </div>
         </div>
