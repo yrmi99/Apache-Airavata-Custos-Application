@@ -34,6 +34,7 @@ const grpc = require('@grpc/grpc-js');
 const protoLoader = require('@grpc/proto-loader');
 const { v4: uuidv4 } = require('uuid');
 const path = require('path');
+const cors = require('cors')
 
 // Load proto
 const PROTO_PATH = path.join(__dirname, '..', 'backend', 'user.proto');

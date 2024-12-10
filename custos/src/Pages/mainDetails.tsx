@@ -184,7 +184,7 @@ export default function MainPage() {
     })
     const info = await userinfo.json()
     req.setId(info.email)
-    client.getUser(req, {"Access-Control-Allow-Origin": "*"}, (err, response) => {
+    client.getUser(req, {}, (err, response) => {
     //  if (err) {
     //    if (err.code == 5) {
     //      
