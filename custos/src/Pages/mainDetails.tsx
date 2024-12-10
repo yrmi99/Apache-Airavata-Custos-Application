@@ -2,10 +2,29 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AuthContext } from 'react-oauth2-code-pkce'
 import { LogOut, UserIcon } from 'lucide-react';
+import { UserManagementServiceClient } from '../generated/UserServiceClientPb';
+import { 
+  CreateUserRequest, 
+  ListUsersResponse, 
+  GetUserRequest, 
+  UpdateUserRequest, 
+  DeleteUserRequest 
+} from '../generated/user_pb';
+
+import { Empty } from 'google-protobuf/google/protobuf/empty_pb';
+
+
+const client = new UserManagementServiceClient('http://localhost:8080', null, null);
 
 interface TokenData {
   name?: string
   email?: string
+}
+
+interface User {
+  id: string
+  name: string
+  email: string
 }
 
 
@@ -117,6 +136,10 @@ export default function MainPage() {
   const [message, setMessage] = useState('Get started by adding some content.'); //
   const [isLoading, setIsLoading] = useState(false); //
   const [isAddingGroup, setAdding] = useState(false);
+  const [userNotFound, setUserNotFound] = useState(false);
+  const [newUserData, setnewUserData] = useState({name: '', email: ''})
+  const [users, setUsers] = useState<User[]>([])
+
 
   useEffect(() => {
     if (!token) {
@@ -124,10 +147,68 @@ export default function MainPage() {
     }
   }, [token, navigate])
 
+  useEffect(() => {
+    promptInfo();
+  }, [])
+
+  useEffect(() => {
+    const req = new Empty();
+    client.listUsers(req, {}, (err, response) => {
+      if (err) {
+        console.error('Error fetching users:', err);
+        return;
+      }
+
+      // Convert the protobuf User objects into a simple JS array of objects
+      const userList = response.getUsersList().map(user => ({
+        id: user.getId(),
+        name: user.getName(),
+        email: user.getEmail()
+      }));
+      setUsers(userList);
+    });
+  }, [])
+
   if (!token || !tokenData) return null
 
   const userData: TokenData = typeof tokenData === 'string' ? JSON.parse(tokenData) : tokenData
 /////////////////////////////////////////////////////////
+  const promptInfo = async() => {
+    const req = new GetUserRequest();
+    const userinfo = await fetch('https://api.playground.usecustos.org/api/v1/user-management/userinfo', {
+            method: 'GET',
+            headers: {
+              client_id: 'custos-w2pcilydswffevyrswct-10000000',
+              Authorization: `Bearer ${token}`,
+            }
+    })
+    const info = await userinfo.json()
+    req.setId(info.email)
+    client.getUser(req, {"Access-Control-Allow-Origin": "*"}, (err, response) => {
+    //  if (err) {
+    //    if (err.code == 5) {
+    //      
+    //    }
+    //    else {
+    //      console.error("Error fetching user:", err.message)
+    //    }
+    //  }
+    });
+  };
+
+  const handleCreateUser = () => {
+    const req = new CreateUserRequest();
+    req.setName(newUserData.name);
+    req.setEmail(newUserData.email);
+    client.createUser(req, {}, (err, response) => {
+      if (err) {
+        console.error("Error creating user:", err);
+        return;
+      }
+      setnewUserData({ name: '', email: '' });
+    });
+  };
+
   const handleAddContent = async () => {
       try {
           setIsLoading(true);
@@ -174,6 +255,7 @@ export default function MainPage() {
   };
 //------------------------------------------------------------
   return (
+
     <div style={styles.body}>
       <div style={styles.div}>
         <h2 style={styles.title}>MyApp</h2>
@@ -196,6 +278,19 @@ export default function MainPage() {
             <div style={styles.controlsContainer}>
             </div>
           </div>
+        </div>
+
+        <div style={styles.div}>
+          {users.map(u => (
+            <tr key={u.id}>
+              <td>{u.id}</td>
+              <td>{u.name}</td>
+              <td>{u.email}</td>
+            </tr>
+          ))}
+          {users.length === 0 && (
+            <tr><td>No users found</td></tr>
+          )}
         </div>
 
         <div style={styles.content}>
