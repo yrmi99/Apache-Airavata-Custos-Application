@@ -2,14 +2,14 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AuthContext } from 'react-oauth2-code-pkce'
 import { LogOut, UserIcon } from 'lucide-react';
-import { UserManagementServiceClient } from '../generated/UserServiceClientPb';
+import { UserManagementServiceClient } from '../generated2/UserServiceClientPb';
 import { 
   CreateUserRequest, 
   ListUsersResponse, 
   GetUserRequest, 
   UpdateUserRequest, 
   DeleteUserRequest 
-} from '../generated/user_pb';
+} from '../generated2/user_pb';
 
 import { Empty } from 'google-protobuf/google/protobuf/empty_pb';
 
@@ -183,11 +183,11 @@ export default function MainPage() {
             }
     })
     const info = await userinfo.json()
-    req.setId(info.email)
+    req.setEmail(info.email)
     client.getUser(req, {}, (err, response) => {
       if (err) {
         if (err.code == 5) {
-          
+          setUserNotFound(true)
         }
         else {
           console.error("Error fetching user:", err.message)
@@ -207,6 +207,15 @@ export default function MainPage() {
       }
       setnewUserData({ name: '', email: '' });
     });
+    setUserNotFound(false)
+  };
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setnewUserData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
   const handleAddContent = async () => {
@@ -255,67 +264,126 @@ export default function MainPage() {
   };
 //------------------------------------------------------------
   return (
+    <div>
+      <></>
 
-    <div style={styles.body}>
-      <div style={styles.div}>
-        <h2 style={styles.title}>MyApp</h2>
-        <span style={styles.welcome}>Welcome, {userData.name || 'N/A'}</span>
+      {userNotFound &&
+      <form onSubmit={handleCreateUser}>
+        <div style={{ marginBottom: '15px' }}>
+          <label htmlFor="name" style={{ display: 'block', marginBottom: '5px' }}>Name:</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            value={newUserData.name}
+            onChange={handleChange}
+            placeholder="Enter your name"
+            required
+            style={{
+              padding: '8px',
+              width: '300px',
+              borderRadius: '4px',
+              border: '1px solid #ccc',
+            }}
+          />
+        </div>
+        <div style={{ marginBottom: '15px' }}>
+          <label htmlFor="email" style={{ display: 'block', marginBottom: '5px' }}>Email:</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            value={newUserData.email}
+            onChange={handleChange}
+            placeholder="Enter your email"
+            required
+            style={{
+              padding: '8px',
+              width: '300px',
+              borderRadius: '4px',
+              border: '1px solid #ccc',
+            }}
+          />
+        </div>
+        <button
+          type="submit"
+          style={{
+            padding: '10px 20px',
+            fontSize: '16px',
+            backgroundColor: '#007BFF',
+            color: '#fff',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: 'pointer',
+          }}
+        >
+          Submit
+        </button>
+      </form>}
 
-        <div style={styles.userContainer}>
-          <div style={styles.iconColumn}>
-            <UserIcon style={{marginRight:'32px'}} size={170} color="#6d53ac" strokeWidth={1.5}/>
-          </div>
-          <div style={styles.infoColumn}>
-            <div style={styles.userInfoText}>
-              <div style={{ fontWeight: 'bold', textDecoration: 'underline' }}>User Info</div>
-              <div>
-                Name: {userData.name || 'N/A'}
-                <br />
-                Email: {userData.email || 'N/A'}
+      {!userNotFound &&
+      <div style={styles.body}>
+        <div style={styles.div}>
+          <h2 style={styles.title}>MyApp</h2>
+          <span style={styles.welcome}>Welcome, {userData.name || 'N/A'}</span>
+
+          <div style={styles.userContainer}>
+            <div style={styles.iconColumn}>
+              <UserIcon style={{marginRight:'32px'}} size={170} color="#6d53ac" strokeWidth={1.5}/>
+            </div>
+            <div style={styles.infoColumn}>
+              <div style={styles.userInfoText}>
+                <div style={{ fontWeight: 'bold', textDecoration: 'underline' }}>User Info</div>
+                <div>
+                  Name: {userData.name || 'N/A'}
+                  <br />
+                  Email: {userData.email || 'N/A'}
+                </div>
+              </div>
+
+              <div style={styles.controlsContainer}>
               </div>
             </div>
+          </div>
 
-            <div style={styles.controlsContainer}>
-            </div>
+          <div style={styles.div}>
+            {users.map(u => (
+              <div key={u.id}>
+                <div>{u.id}</div>
+                <div>{u.name}</div>
+                <div>{u.email}</div>
+              </div>
+            ))}
+            {users.length === 0 && (
+              <div>No users found</div>
+            )}
+          </div>
+
+          <div style={styles.content}>
+            {/* <p className="text-wrapper">Get started by adding some content.</p> */}
+            {/* <button type="button" style={styles.addContent}>
+              Add Content
+            </button> */}
+            <p className="text-wrapper">{message}</p>
+              <button 
+                  onClick={handleAddContent}
+                  disabled={isLoading}
+                  style={styles.addContent}
+              >
+                  {isLoading ? 'Loading...' : 'Add User'}
+              </button>
+              <p className="group-wrapper">{message}</p>
+              <button 
+                  onClick={handleAddContent}
+                  disabled={isAddingGroup}
+                  style={styles.addContent}
+              >
+                  {isAddingGroup ? 'Loading...' : 'Add Group'}
+              </button>
+          </div>
           </div>
         </div>
-
-        <div style={styles.div}>
-          {users.map(u => (
-            <div key={u.id}>
-              <div>{u.id}</div>
-              <div>{u.name}</div>
-              <div>{u.email}</div>
-            </div>
-          ))}
-          {users.length === 0 && (
-            <div>No users found</div>
-          )}
-        </div>
-
-        <div style={styles.content}>
-          {/* <p className="text-wrapper">Get started by adding some content.</p> */}
-          {/* <button type="button" style={styles.addContent}>
-            Add Content
-          </button> */}
-          <p className="text-wrapper">{message}</p>
-            <button 
-                onClick={handleAddContent}
-                disabled={isLoading}
-                style={styles.addContent}
-            >
-                {isLoading ? 'Loading...' : 'Add User'}
-            </button>
-            <p className="group-wrapper">{message}</p>
-            <button 
-                onClick={handleAddContent}
-                disabled={isAddingGroup}
-                style={styles.addContent}
-            >
-                {isAddingGroup ? 'Loading...' : 'Add Group'}
-            </button>
-        </div>
-        </div>
+        }
       </div>
   )
 }

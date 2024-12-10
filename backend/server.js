@@ -51,12 +51,12 @@ server.addService(userProto.UserManagementService.service, {
     const { name, email } = call.request;
     const id = uuidv4();
     const user = { id, name, email };
-    users[id] = user;
+    users[email] = user;
     callback(null, { user });
   },
   GetUser: (call, callback) => {
-    const { id } = call.request;
-    const user = users[id];
+    const { email } = call.request;
+    const user = users[email];
     if (!user) {
       return callback({
         code: grpc.status.NOT_FOUND,

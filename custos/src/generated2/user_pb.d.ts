@@ -72,8 +72,7 @@ export namespace CreateUserResponse {
 }
 
 export class GetUserRequest extends jspb.Message {
-  getId(): string;
-  setId(value: string): GetUserRequest;
+  getEmail(): string;
   setEmail(value: string): GetUserRequest;
 
   serializeBinary(): Uint8Array;
