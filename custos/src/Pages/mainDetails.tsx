@@ -185,14 +185,14 @@ export default function MainPage() {
     const info = await userinfo.json()
     req.setId(info.email)
     client.getUser(req, {}, (err, response) => {
-    //  if (err) {
-    //    if (err.code == 5) {
-    //      
-    //    }
-    //    else {
-    //      console.error("Error fetching user:", err.message)
-    //    }
-    //  }
+      if (err) {
+        if (err.code == 5) {
+          
+        }
+        else {
+          console.error("Error fetching user:", err.message)
+        }
+      }
     });
   };
 
@@ -282,14 +282,14 @@ export default function MainPage() {
 
         <div style={styles.div}>
           {users.map(u => (
-            <tr key={u.id}>
-              <td>{u.id}</td>
-              <td>{u.name}</td>
-              <td>{u.email}</td>
-            </tr>
+            <div key={u.id}>
+              <div>{u.id}</div>
+              <div>{u.name}</div>
+              <div>{u.email}</div>
+            </div>
           ))}
           {users.length === 0 && (
-            <tr><td>No users found</td></tr>
+            <div>No users found</div>
           )}
         </div>
 
