@@ -171,6 +171,17 @@ export default function MainPage() {
 
   if (!token || !tokenData) return null
 
+  const tableHeaderStyle = {
+    borderBottom: '2px solid #ccc',
+    padding: '10px',
+    backgroundColor: '#f4f4f4',
+  };
+  
+  const tableCellStyle = {
+    borderBottom: '1px solid #ccc',
+    padding: '10px',
+  };
+
   const userData: TokenData = typeof tokenData === 'string' ? JSON.parse(tokenData) : tokenData
 /////////////////////////////////////////////////////////
   const promptInfo = async() => {
@@ -346,32 +357,96 @@ export default function MainPage() {
             </div>
           </div>
 
-          <div style={styles.div}>
-            {users.map(u => (
-              <div key={u.id}>
-                <div>{u.id}</div>
-                <div>{u.name}</div>
-                <div>{u.email}</div>
-              </div>
-            ))}
-            {users.length === 0 && (
-              <div>No users found</div>
+        <table
+          style={{width: '100%',borderCollapse: 'collapse',textAlign: 'left',}}>
+          <thead>
+            <tr>
+              <th style={tableHeaderStyle}>ID</th>
+              <th style={tableHeaderStyle}>Name</th>
+              <th style={tableHeaderStyle}>Email</th>
+            </tr>
+          </thead>
+          <tbody>
+            {users.length === 0 ? (
+              <tr>
+                <td colSpan={3} style={{ textAlign: 'center', padding: '10px' }}>
+                  No users available.
+                </td>
+              </tr>
+            ) : (
+              users.map((user) => (
+                <tr key={user.id}>
+                  <td style={tableCellStyle}>{user.id}</td>
+                  <td style={tableCellStyle}>{user.name}</td>
+                  <td style={tableCellStyle}>{user.email}</td>
+                </tr>
+              ))
             )}
-          </div>
+          </tbody>
+      </table>
 
           <div style={styles.content}>
-            {/* <p className="text-wrapper">Get started by adding some content.</p> */}
-            {/* <button type="button" style={styles.addContent}>
-              Add Content
-            </button> */}
-            <p className="text-wrapper">{message}</p>
-              <button 
-                  onClick={handleAddContent}
-                  disabled={isLoading}
-                  style={styles.addContent}
+            <form
+              onSubmit={handleCreateUser}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px',
+                marginBottom: '20px',
+              }}
+            >
+              <label style={{ fontWeight: 'bold' }}>
+                Name:
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  value={newUserData.name}
+                  onChange={handleChange}
+                  placeholder="Enter your name"
+                  required
+                  style={{
+                    padding: '8px',
+                    width: '300px',
+                    borderRadius: '4px',
+                    border: '1px solid #ccc',
+                  }}
+                />
+              </label>
+
+              <label style={{ fontWeight: 'bold' }}>
+                Email:
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={newUserData.email}
+                  onChange={handleChange}
+                  placeholder="Enter your email"
+                  required
+                  style={{
+                    padding: '8px',
+                    width: '300px',
+                    borderRadius: '4px',
+                    border: '1px solid #ccc',
+                  }}
+                />
+              </label>
+
+              <button
+                type="submit"
+                style={{
+                  padding: '5px 15px',
+                  borderRadius: '4px',
+                  border: 'none',
+                  backgroundColor: '#007BFF',
+                  color: '#fff',
+                  cursor: 'pointer',
+                }}
               >
-                  {isLoading ? 'Loading...' : 'Add User'}
+                Create
               </button>
+              </form>
               <p className="group-wrapper">{message}</p>
               <button 
                   onClick={handleAddContent}
