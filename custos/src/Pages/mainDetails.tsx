@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { AuthContext } from 'react-oauth2-code-pkce'
 import { LogOut, UserIcon } from 'lucide-react';
 import { UserManagementServiceClient } from '../generated2/UserServiceClientPb';
+import { GroupManagementServiceClient } from '../generated2/GroupServiceClientPb'; // Adjust path as needed
 import { 
   CreateUserRequest, 
   ListUsersResponse, 
@@ -11,14 +12,27 @@ import {
   DeleteUserRequest 
 } from '../generated2/user_pb';
 
+import {
+  CreateGroupRequest,
+  UpdateGroupRequest,
+  DeleteGroupRequest,
+} from '../generated2/group_pb';
+
 import { Empty } from 'google-protobuf/google/protobuf/empty_pb';
 
 
 const client = new UserManagementServiceClient('http://localhost:8080', null, null);
+const groupClient = new GroupManagementServiceClient('http://localhost:8080', null, null);
 
 interface TokenData {
   name?: string
   email?: string
+}
+
+interface Group {
+  id: string;
+  name: string;
+  description: string;
 }
 
 interface User {
@@ -125,7 +139,7 @@ const styles = {
     display: 'flex',
     flexDirection: 'column' as const,
     alignItems: 'center',
-    marginTop: '64px',
+    marginTop: '30px',
   }
 };
 
@@ -139,6 +153,8 @@ export default function MainPage() {
   const [userNotFound, setUserNotFound] = useState(false);
   const [newUserData, setnewUserData] = useState({name: '', email: ''})
   const [users, setUsers] = useState<User[]>([])
+  const [groups, setGroups] = useState<Group[]>([]);
+  const [newGroupData, setNewGroupData] = useState({ name: '', description: '' });
 
 
   useEffect(() => {
@@ -150,6 +166,27 @@ export default function MainPage() {
   useEffect(() => {
     promptInfo();
   }, [])
+
+   // Fetching initial groups data
+   useEffect(() => {
+    const fetchGroups = async () => {
+      // Assuming a similar client function for fetching groups exists.
+      const req = new Empty();
+      groupClient.listGroups(req, {}, (err, response) => {
+        if (err) {
+          console.error('Error fetching groups:', err);
+          return;
+        }
+        const groupList = response.getGroupsList().map(group => ({
+          id: group.getId(),
+          name: group.getName(),
+          description: group.getDescription(),
+        }));
+        setGroups(groupList);
+      });
+    };
+    fetchGroups();
+  }, []);
 
   useEffect(() => {
     const req = new Empty();
@@ -219,6 +256,113 @@ export default function MainPage() {
       setnewUserData({ name: '', email: '' });
     });
     setUserNotFound(false)
+  };
+
+  const handleUpdateUser = () => {
+    const req = new UpdateUserRequest();
+    req.setName(newUserData.name);
+    req.setEmail(newUserData.email);
+    client.updateUser(req, {}, (err, response) => {
+      if (err) {
+        console.error("Error updating user:", err);
+        return;
+      }
+      setnewUserData({ name: '', email: '' });
+    });
+    setUserNotFound(false)
+  };
+
+  const handleDeleteUser = () => {
+    const req = new DeleteUserRequest();
+    req.setEmail(newUserData.email);
+    client.deleteUser(req, {}, (err, response) => {
+      if (err) {
+        console.error("Error creating user:", err);
+        return;
+      }
+      setnewUserData({ name: '', email: '' });
+    });
+    setUserNotFound(false)
+  };
+
+  const handleCreateGroup = () => {
+    const req = new CreateGroupRequest();
+    req.setName(newGroupData.name);
+    req.setDescription(newGroupData.description);
+
+    groupClient.createGroup(req, {}, (err, response) => {
+      if (err) {
+        console.error('Error creating group:', err);
+        return;
+      }
+      setNewGroupData({ name: '', description: '' }); // Clear form after success
+      setGroups(prevGroups => [
+        ...prevGroups,
+        { id: response.getId(), name: newGroupData.name, description: newGroupData.description },
+      ]);
+    });
+  };
+  
+  const handleEditGroup = (groupId: string, updatedData: { name: string; description: string }) => {
+    const req = new UpdateGroupRequest();
+    req.setId(groupId);
+    req.setName(updatedData.name);
+    req.setDescription(updatedData.description);
+
+    groupClient.updateGroup(req, {}, (err) => {
+      if (err) {
+        console.error('Error updating group:', err);
+        return;
+      }
+      setGroups(prevGroups => 
+        prevGroups.map(group =>
+          group.id === groupId ? { ...group, ...updatedData } : group
+        )
+      );
+    });
+  };
+  
+  const handleDeleteGroup = (groupId: string) => {
+    const req = new DeleteGroupRequest();
+    req.setId(groupId);
+
+    groupClient.deleteGroup(req, {}, (err) => {
+      if (err) {
+        console.error('Error deleting group:', err);
+        return;
+      }
+      setGroups(prevGroups => prevGroups.filter(group => group.id !== groupId));
+    });
+  };
+  
+  const handleGroupChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setNewGroupData(prevData => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleConditionalAction = () => {
+    const { name, email } = newUserData;
+  
+    if (name && email) {
+      const req = new GetUserRequest();
+      req.setEmail(email)
+      client.getUser(req, {}, (err, response) => {
+        if (err) {
+          handleCreateUser();
+        } else {
+          handleUpdateUser();
+        }
+      })
+    } else if (email) {
+      // Only email is filled: Delete the user
+      handleDeleteUser();
+    } else {
+      // Neither field is filled: Show an error or prompt the user
+      alert("Please fill out at least one field.");
+    }
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -384,10 +528,16 @@ export default function MainPage() {
             )}
           </tbody>
       </table>
+      <br></br><br></br>
+          <div style={{alignItems:'center'}} >To Create, input a new Name and Email</div>
+          <div style={{alignItems:'center'}} >To Update, input a new Name and current Email</div>
+          <div style={{alignItems:'center'}} >To Delete, input a current Email</div>
 
           <div style={styles.content}>
             <form
-              onSubmit={handleCreateUser}
+              onSubmit={(e) => {
+                e.preventDefault(); // Prevent default form submission
+                handleConditionalAction();}}
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -404,7 +554,6 @@ export default function MainPage() {
                   value={newUserData.name}
                   onChange={handleChange}
                   placeholder="Enter your name"
-                  required
                   style={{
                     padding: '8px',
                     width: '300px',
@@ -455,6 +604,106 @@ export default function MainPage() {
               >
                   {isAddingGroup ? 'Loading...' : 'Add Group'}
               </button>
+          </div>
+          <div style={styles.content}>
+            <h2>Create a New Group</h2>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleCreateGroup();
+              }}
+              style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '20px' }}
+            >
+              <input
+                type="text"
+                placeholder="Group Name"
+                value={newGroupData.name}
+                onChange={(e) => setNewGroupData({ ...newGroupData, name: e.target.value })}
+                required
+                style={{
+                  padding: '10px',
+                  marginBottom: '10px',
+                  borderRadius: '5px',
+                  border: '1px solid #ccc',
+                  width: '100%',
+                  maxWidth: '400px',
+                }}
+              />
+              <textarea
+                placeholder="Group Description"
+                value={newGroupData.description}
+                onChange={(e) => setNewGroupData({ ...newGroupData, description: e.target.value })}
+                required
+                style={{
+                  padding: '10px',
+                  marginBottom: '10px',
+                  borderRadius: '5px',
+                  border: '1px solid #ccc',
+                  width: '100%',
+                  maxWidth: '400px',
+                  minHeight: '80px',
+                }}
+              />
+              <button
+                type="submit"
+                style={{
+                  ...styles.addContent,
+                  padding: '10px 20px',
+                  borderRadius: '5px',
+                  backgroundColor: 'rgb(75.2, 52.36, 131.37)',
+                  color: '#fff',
+                }}
+              >
+                Create Group
+              </button>
+            </form>
+
+            <h2>Existing Groups</h2>
+            <ul style={{ listStyle: 'none', padding: 0, width: '100%', maxWidth: '400px' }}>
+              {groups.map((group) => (
+                <li
+                  key={group.id}
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    padding: '10px',
+                    marginBottom: '10px',
+                    border: '1px solid #ccc',
+                    borderRadius: '5px',
+                    backgroundColor: '#f9f9f9',
+                  }}
+                >
+                  <div>
+                    <strong>{group.name}</strong>
+                    <p style={{ margin: 0 }}>{group.description}</p>
+                  </div>
+                  <div>
+                    <button
+                      onClick={() => handleEditGroup(group.id, { name: group.name, description: group.description })}
+                      style={{
+                        ...styles.addContent,
+                        padding: '5px 10px',
+                        marginRight: '5px',
+                      }}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleDeleteGroup(group.id)}
+                      style={{
+                        ...styles.addContent,
+                        padding: '5px 10px',
+                        backgroundColor: '#e74c3c',
+                        color: '#fff',
+                      }}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </li>
+              ))}
+            </ul>
           </div>
           </div>
         </div>

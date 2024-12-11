@@ -19,9 +19,19 @@ import * as grpcWeb from 'grpc-web';
 
 import * as google_protobuf_empty_pb from 'google-protobuf/google/protobuf/empty_pb';
 import * as user_pb from './user_pb';
+import { CreateGroupRequest, DeleteGroupRequest, UpdateGroupRequest } from './group_pb';
 
 
 export class UserManagementServiceClient {
+  deleteGroup(req: DeleteGroupRequest, arg1: {}, arg2: (err: any) => void) {
+    throw new Error('Method not implemented.');
+  }
+  createGroup(req: CreateGroupRequest, arg1: {}, arg2: (err: any, response: any) => void) {
+    throw new Error('Method not implemented.');
+  }
+  updateGroup(req: UpdateGroupRequest, arg1: {}, arg2: (err: any) => void) {
+    throw new Error('Method not implemented.');
+  }
   client_: grpcWeb.AbstractClientBase;
   hostname_: string;
   credentials_: null | { [index: string]: string; };

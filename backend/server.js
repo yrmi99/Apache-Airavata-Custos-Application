@@ -66,26 +66,27 @@ server.addService(userProto.UserManagementService.service, {
     callback(null, { user });
   },
   UpdateUser: (call, callback) => {
-    const { id, name, email } = call.request;
-    const user = users[id];
+    const { name, email } = call.request;
+    const user = users[email];
+    const id = user.id
     if (!user) {
       return callback({
         code: grpc.status.NOT_FOUND,
         message: 'User not found'
       });
     }
-    users[id] = { id, name, email };
-    callback(null, { user: users[id] });
+    users[email] = { id, name, email };
+    callback(null, { user: users[email] });
   },
   DeleteUser: (call, callback) => {
-    const { id } = call.request;
-    if (!users[id]) {
+    const { email } = call.request;
+    if (!users[email]) {
       return callback({
         code: grpc.status.NOT_FOUND,
         message: 'User not found'
       });
     }
-    delete users[id];
+    delete users[email];
     callback(null, { success: true });
   },
   ListUsers: (_, callback) => {
