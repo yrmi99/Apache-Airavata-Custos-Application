@@ -110,9 +110,6 @@ export namespace GetUserResponse {
 }
 
 export class UpdateUserRequest extends jspb.Message {
-  getId(): string;
-  setId(value: string): UpdateUserRequest;
-
   getName(): string;
   setName(value: string): UpdateUserRequest;
 
@@ -129,7 +126,6 @@ export class UpdateUserRequest extends jspb.Message {
 
 export namespace UpdateUserRequest {
   export type AsObject = {
-    id: string,
     name: string,
     email: string,
   }
@@ -156,8 +152,8 @@ export namespace UpdateUserResponse {
 }
 
 export class DeleteUserRequest extends jspb.Message {
-  getId(): string;
-  setId(value: string): DeleteUserRequest;
+  getEmail(): string;
+  setEmail(value: string): DeleteUserRequest;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): DeleteUserRequest.AsObject;
@@ -169,7 +165,7 @@ export class DeleteUserRequest extends jspb.Message {
 
 export namespace DeleteUserRequest {
   export type AsObject = {
-    id: string,
+    email: string,
   }
 }
 

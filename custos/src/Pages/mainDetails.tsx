@@ -125,7 +125,7 @@ const styles = {
     display: 'flex',
     flexDirection: 'column' as const,
     alignItems: 'center',
-    marginTop: '64px',
+    marginTop: '30px',
   }
 };
 
@@ -219,6 +219,55 @@ export default function MainPage() {
       setnewUserData({ name: '', email: '' });
     });
     setUserNotFound(false)
+  };
+
+  const handleUpdateUser = () => {
+    const req = new UpdateUserRequest();
+    req.setName(newUserData.name);
+    req.setEmail(newUserData.email);
+    client.updateUser(req, {}, (err, response) => {
+      if (err) {
+        console.error("Error updating user:", err);
+        return;
+      }
+      setnewUserData({ name: '', email: '' });
+    });
+    setUserNotFound(false)
+  };
+
+  const handleDeleteUser = () => {
+    const req = new DeleteUserRequest();
+    req.setEmail(newUserData.email);
+    client.deleteUser(req, {}, (err, response) => {
+      if (err) {
+        console.error("Error creating user:", err);
+        return;
+      }
+      setnewUserData({ name: '', email: '' });
+    });
+    setUserNotFound(false)
+  };
+
+  const handleConditionalAction = () => {
+    const { name, email } = newUserData;
+  
+    if (name && email) {
+      const req = new GetUserRequest();
+      req.setEmail(email)
+      client.getUser(req, {}, (err, response) => {
+        if (err) {
+          handleCreateUser();
+        } else {
+          handleUpdateUser();
+        }
+      })
+    } else if (email) {
+      // Only email is filled: Delete the user
+      handleDeleteUser();
+    } else {
+      // Neither field is filled: Show an error or prompt the user
+      alert("Please fill out at least one field.");
+    }
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -384,10 +433,16 @@ export default function MainPage() {
             )}
           </tbody>
       </table>
+      <br></br><br></br>
+          <div style={{alignItems:'center'}} >To Create, input a new Name and Email</div>
+          <div style={{alignItems:'center'}} >To Update, input a new Name and current Email</div>
+          <div style={{alignItems:'center'}} >To Delete, input a current Email</div>
 
           <div style={styles.content}>
             <form
-              onSubmit={handleCreateUser}
+              onSubmit={(e) => {
+                e.preventDefault(); // Prevent default form submission
+                handleConditionalAction();}}
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -404,7 +459,6 @@ export default function MainPage() {
                   value={newUserData.name}
                   onChange={handleChange}
                   placeholder="Enter your name"
-                  required
                   style={{
                     padding: '8px',
                     width: '300px',
