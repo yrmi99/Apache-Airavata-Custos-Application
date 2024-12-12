@@ -1,0 +1,78 @@
+syntax = "proto3";
+
+// Import user proto for User messages
+import "user.proto";
+
+package user;
+
+// Group service
+service GroupManagementService {
+  // Create a new group
+  rpc CreateGroup(CreateGroupRequest) returns (GroupResponse);
+
+  // Update an existing group
+  rpc UpdateGroup(UpdateGroupRequest) returns (GroupResponse);
+
+  // Delete a group
+  rpc DeleteGroup(DeleteGroupRequest) returns (DeleteGroupResponse);
+
+  // Get a group's details
+  rpc GetGroup(GetGroupRequest) returns (GroupResponse);
+
+  // List all groups
+  rpc ListGroups(Empty) returns (ListGroupsResponse);
+}
+
+// Messages
+message Group {
+  string id = 1;              // Unique ID for the group
+  string name = 2;            // Name of the group
+  string description = 3;     // Description of the group
+  repeated User users = 4;    // List of users in the group
+}
+
+// CreateGroup
+message CreateGroupRequest {
+  string name = 1;            // Name of the group
+  string description = 2;     // Description of the group
+  repeated string user_ids = 3; // List of user IDs to include in the group
+}
+
+message GroupResponse {
+  Group group = 1;            // The group details
+}
+
+message UpdateGroupRequest {
+  string id = 1;              // ID of the group to update
+  string name = 2;            // New name for the group (optional)
+  string description = 3;     // New description for the group (optional)
+  repeated string user_ids = 4; // Updated list of user IDs (optional)
+}
+
+// DeleteGroup
+message DeleteGroupRequest {
+  string id = 1;              // ID of the group to delete
+}
+
+message CreateGroupRequest {
+  string name = 1;            // Name of the group
+  string description = 2;     // Description of the group
+  repeated string user_ids = 3; // List of user IDs to include in the group
+}
+
+message DeleteGroupResponse {
+  string id = 1;              // ID of the deleted group
+}
+
+// GetGroup
+message GetGroupRequest {
+  string id = 1;              // ID of the group to retrieve
+}
+
+// ListGroups
+message ListGroupsResponse {
+  repeated Group groups = 1;  // List of all groups
+}
+
+// Empty message for endpoints without request payload
+message Empty {}
