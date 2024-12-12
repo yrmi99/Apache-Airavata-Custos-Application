@@ -116,7 +116,11 @@ function startServer() {
       return;
     }
     console.log(`Server running at http://0.0.0.0:${port}`);
+<<<<<<< HEAD
     server.start(); // Start the server *after* it has successfully bound
+=======
+    //server.start(); // Start the server *after* it has successfully bound
+>>>>>>> newMilestone
   });
 }
 

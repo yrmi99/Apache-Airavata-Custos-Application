@@ -2,7 +2,11 @@ const grpc = require('@grpc/grpc-js');
 const protoLoader = require('@grpc/proto-loader');
 const path = require('path');
 const mongoose = require('mongoose');
+<<<<<<< HEAD
 const User = require('models/user'); // Import the User model
+=======
+const User = require('/Users/yashc/Documents/Github/Apache-Airavata-Custos-Application/custos/src/backend/models/user.js'); // Import the User model
+>>>>>>> newMilestone
 
 // Load the protobuf definitions
 const PROTO_PATH = path.resolve(__dirname, './user_profile.proto');
@@ -65,7 +69,11 @@ server.bindAsync('localhost:50051', grpc.ServerCredentials.createInsecure(), (er
     return;
   }
   console.log(`gRPC server running at http://localhost:50052`);
+<<<<<<< HEAD
   server.start();
+=======
+  //server.start();
+>>>>>>> newMilestone
 });
 //------------------------------------------------------------------------------------------------------------------
 
